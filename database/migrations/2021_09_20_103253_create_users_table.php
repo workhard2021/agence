@@ -19,9 +19,10 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->foreignId('ville_id')->nullable()->constrained()->onDelete('SET NULL');
+            $table->string('sous_categorie_id')->nullable()->onDelete("SET NULL");
             $table->string('avatar')->nullable()->default("user/avatar.png");
             $table->text('description',500)->nullable();
-            $table->string('profession')->nullable()->default("Exemple: Développeur web");
+            $table->string('cv')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

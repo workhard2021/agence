@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AnnonceRequest;
+use App\Http\Resources\AnnonceCollection;
+use App\Http\Resources\AnnonceResource;
+use App\Models\Annonce;
 use Illuminate\Http\Request;
 
 class AnnonceController extends Controller
@@ -12,73 +16,34 @@ class AnnonceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        echo "bonjour a tous Annonces";
+    { 
+          $item=new AnnonceCollection(Annonce::all());
+          return Response($item,200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(AnnonceRequest $request)
     {
-        //
+          $annonce= Annonce::create($request->all());
+          return Response($annonce,200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
-    {
-        //
+    {   
+        $item=new AnnonceResource(Annonce::findOrfail($id));
+        return Response($item,200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    public function update(AnnonceRequest $request, $id)
+    {  
+           $annonce=Annonce::findOrfail($id);
+           $annonce->update($request->all());
+           return Response($annonce, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $annonce = Annonce::findOrfail($id);
+        $annonce->delete();
+        return Response(["message"=>"effacé"], 200);
     }
 }

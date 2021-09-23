@@ -17,15 +17,16 @@ class Annonce extends Model
           'user_id',
           'sous_categorie_id',
           'type_id',
+          'avatar',
     ];
-
-    public function candidature_users(){
+    public function candidats(){
         return $this->belongsToMany(User::class);
     }
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+    
     public function sousCategorie(){
           return  $this->belongsto(SousCategorie::class);
     }

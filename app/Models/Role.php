@@ -10,7 +10,7 @@ class Role extends Model
 {
     use HasFactory;
     protected $fillable=[
-        "is_admin"
+        
     ];
     public function users(){
           return  $this->belongsToMany(User::class);

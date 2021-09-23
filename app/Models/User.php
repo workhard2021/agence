@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Role;
 use App\Models\Ville;
+use App\Models\Souscategorie;
 
 class User extends Authenticatable
 {
@@ -20,14 +21,17 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
         'ville_id', 
-        'description', 
-        'profession',
-        'avatar'      
+        'description',
+        'sous_categorie_id',
+        'avatar',
+        'cv',      
     ];
+  
 
     /**
      * The attributes that should be hidden for serialization.
@@ -46,19 +50,26 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        "created_at" => "datetime:y-m-d h:i:s",
+        "updated_at" => "datetime:y-m-d h:i:s"
     ];
+    
     public function roles(){
           return  $this->belongsToMany(Role::class);
     }
-    public function user_candidatures(){
+    public function mes_candidatures(){
         return $this->belongsToMany(Annonce::class);
     }
 
-    public function annonces()
+    public function mes_annonces()
     {
         return $this->hasMany(Annonce::class);
     }
     public function ville(){
           return  $this->belongsTo(Ville::class);
+    }
+    public function sous_categorie()
+    {
+        return  $this->belongsTo(SousCategorie::class);
     }
 }

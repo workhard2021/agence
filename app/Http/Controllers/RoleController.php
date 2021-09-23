@@ -2,83 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RoleResource;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
-    {
-         echo "bonjour a tous role";
+    { 
+        $item=RoleResource::collection(Role::all());
+        return response($item);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
-    {
-        //
+    {      
+        $field=$request->validate([
+            "name"=>"required|string"
+        ]);
+        $item=Role::create($field);
+        $item=new RoleResource($item);
+        return response(["message"=>"enregistré","data"=> $item],200);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $item=new RoleResource(Role::findOrfail($id));
+        return response($item, 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $field = $request->validate([
+            "name" => "required|string"
+        ]);
+        $item=Role::findOrfail($id);
+        $item->update($field);
+        $item = new RoleResource($item);
+        return response($item, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+       $item=Role::findOrfail($id);
+       $item->delete();
+       return response(["message"=>"effacé"], 200);
+    }
+    public function attachRole(Request $request){
+         $field=$request->validate([
+              "user_id"=>"required|numeric",
+              "roles"=>"required|array"
+         ]);
+        $item=User::findOrfail($field["user_id"]);
+        $item->roles()->sync($field["roles"]);
+        return response(["message"=>"attaché"],200);
     }
 }

@@ -30,7 +30,7 @@ class UserFactory extends Factory
             "ville_id"=>random_int(1,20),
             'description'=>$this->faker->paragraph(random_int(1,3)),
             'avatar'=>$this->faker->imageUrl(),
-            'profession'=>$this->faker->paragraph(random_int(0,2)),
+            'sous_categorie_id'=>random_int(1,20),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];

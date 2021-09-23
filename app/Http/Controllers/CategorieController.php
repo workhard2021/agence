@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategorieRequest;
+use App\Http\Resources\CategorieResource;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 
 class CategorieController extends Controller
@@ -12,29 +15,15 @@ class CategorieController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-     echo "bonjour a tous categorie";
+    { 
+         $item=CategorieResource::collection(Categorie::all());
+         return Response($item,200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    
+    public function store(CategorieRequest $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $annonce = Categorie::create($request->all());
+        return Response($annonce, 200);
     }
 
     /**
@@ -45,40 +34,21 @@ class CategorieController extends Controller
      */
     public function show($id)
     {
-        //
+        $item =new CategorieResource(Categorie::findOrfail($id));
+        return response($item,200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(CategorieRequest $request, $id)
     {
-        //
+        $item = Categorie::findOrfail($id);
+        $item->update($request->all());
+        return response($item, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $item = Categorie::findOrfail($id);
+        $item->delete();
+        return response(["message"=>"effacé"], 200);
     }
 }
